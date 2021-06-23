@@ -5,11 +5,11 @@
 
 clone repository:
 ```
-git clone https://github.com/MarkBorodin/pdf_generator.git
+git clone https://github.com/MarkBorodin/questionnaire.git
 ```
-move to folder "pdf_generator":
+move to folder "questionnaire":
 ```
-cd pdf_generator
+cd questionnaire
 ```
 
 to install the required libraries, run on command line:
