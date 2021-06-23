@@ -1,0 +1,16 @@
+{% extends 'survey/base.html' %}
+{% load i18n %}
+
+{% block body %}
+<div id="intro">
+	<h1>Results for {{survey}}</h1>
+
+		<ul>
+			{% for question in survey.questions %}
+
+				<li>question</li>
+
+			{% endfor %}
+		</ul>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  backend:
+    container_name: questionnaire_backend
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/srv
+      - static_content:/var/www/pdf_generator
+    ports:
+      - 8020:8000
+  nginx:
+    container_name: questionnaire_nginx
+    image: nginx:1.19-alpine
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - static_content:/var/www/pdf_generator
+    ports:
+      - 80:80
+      - 444:443
+    depends_on:
+      - backend
+
+volumes:
+  pgdata: {}
+  static_content: {}
