@@ -1,14 +1,26 @@
-{% extends 'survey/base.html' %}
+{% extends 'questionnaire/base.html' %}
 {% load i18n %}
+{% load static %}
+{% load extras %}
+
+
+
 
 {% block body %}
 <div id="intro">
-	<h1>Results for {{survey}}</h1>
+	<h1 style="text-align: center;">Results for "{{survey}}":</h1><br>
 
 		<ul>
-			{% for question in survey.questions %}
+			{% for question in survey.questions.all %}
 
-				<li>question</li>
+				<li><h3>Question: <em style="font-style: italic;">{{question.text}}</em></h3>
+
+					{% for answer in question.answers.all %}
+
+						<p>Answer: <b style="font-style: italic;">{{answer.body}}</b></p><br>
+
+					{% endfor %}
+				</li>
 
 			{% endfor %}
 		</ul>

@@ -37,18 +37,13 @@ INSTALLED_APPS = [
     'crispy_forms',
     'wkhtmltopdf',
     'nested_admin',
-]
-# !!!!!!!!!!!!!
-from pathlib import Path
-
-CSV_DIRECTORY = Path("media/")
-TEX_DIRECTORY = Path("media/")
-
-
-INSTALLED_APPS += [
     'bootstrapform',
     'survey'
 ]
+# !!!!!!!!!!!!!
+from pathlib import Path
+CSV_DIRECTORY = Path("media/")
+TEX_DIRECTORY = Path("media/")
 # !!!!!!!!!!!!!
 
 MIDDLEWARE = [

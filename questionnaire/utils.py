@@ -7,7 +7,7 @@ from questionnaire.models import SurveyPlus
 class GetPDF(PDFTemplateView):
     """get or see pdf file"""
     pk_url_kwarg = 'id'
-    template_name = 'view_result_pdf_file.html'
+    template_name = 'questionnaire/view_result_pdf_file.html'
     show_content_in_browser = True
 
     def get_context_data(self, **kwargs):

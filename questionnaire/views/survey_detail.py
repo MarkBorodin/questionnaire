@@ -2,19 +2,26 @@
 import logging
 
 from django.conf import settings
-from django.shortcuts import redirect, render, reverse
+from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.views.generic import View
 
 from questionnaire.decorators import survey_available
 from questionnaire.forms import ResponsePlusForm
+from questionnaire.models import SurveyPlus
 
 LOGGER = logging.getLogger(__name__)
 
 
 class SurveyDetail(View):
-    @survey_available
+    # @survey_available
     def get(self, request, *args, **kwargs):
-        survey = kwargs.get("survey")
+
+        survey = get_object_or_404(
+            SurveyPlus.objects.prefetch_related("questions", "questions__category"), is_published=True,
+            slug=kwargs["slug"]
+        )
+
+        # survey = kwargs.get("survey")
         step = kwargs.get("step", 0)
         if survey.template is not None and len(survey.template) > 4:
             template_name = survey.template
@@ -73,7 +80,7 @@ class SurveyDetail(View):
         return render(request, template_name, context)
 
     def treat_valid_form(self, form, kwargs, request, survey):
-        session_key = "survey_%s" % (kwargs["survey_slug"],)
+        session_key = "survey_%s" % (kwargs["slug"],)
         if session_key not in request.session:
             request.session[session_key] = {}
         for key, value in list(form.cleaned_data.items()):
@@ -102,4 +109,5 @@ class SurveyDetail(View):
             if "next" in request.session:
                 del request.session["next"]
             return redirect(next_)
-        return redirect("survey-confirmation", uuid=response.interview_uuid)
+        # return redirect("survey-confirmation", uuid=response.interview_uuid)
+        return redirect(reverse('questionnaire:survey-confirmation', args=(response.interview_uuid, )))

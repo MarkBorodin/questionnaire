@@ -15,7 +15,7 @@ def survey_available(func):
     @wraps(func)
     def survey_check(self, request, *args, **kwargs):
         survey = get_object_or_404(
-            SurveyPlus.objects.prefetch_related("questions", "questions__category"), is_published=True, slug=kwargs["survey_slug"]
+            SurveyPlus.objects.prefetch_related("questions", "questions__category"), is_published=True, slug=kwargs["slug"]
         )
         if not survey.is_published:
             raise Http404

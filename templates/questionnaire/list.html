@@ -1,14 +1,14 @@
-{% extends 'survey/base.html' %}
+{% extends 'questionnaire/base.html' %}
 {% load i18n %}
 
 {% block body %}
 <div id="intro">
-	<h1>"Welcome to the Django Survey app"</h1>
+	<h1>Welcome to the Django Survey app</h1>
 
 		<ul>
 			{% for survey in surveys %}
 
-				<li><a href="{% url 'questionnaire:survey-detail' survey_slug=survey.slug %}">{{survey.name}}</a></li>
+				<li><a href="{% url 'questionnaire:survey-detail' slug=survey.slug %}">{{survey.name}}</a></li>
 
 			{% endfor %}
 		</ul>

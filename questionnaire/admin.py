@@ -36,9 +36,9 @@ class SurveyPlusAdmin(admin.ModelAdmin):
     list_filter = ("is_published", "need_logged_user")
     # inlines = [CategoryPlusInline, QuestionPlusInline]
     inlines = [QuestionPlusInline]
-    actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
+    # actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
     prepopulated_fields = {'slug': ('client', 'title'), }
-    exclude = ['display_method', 'template']
+    exclude = ['display_method']
 
 
 class SurveyTemplateAdmin(admin.ModelAdmin):
@@ -111,8 +111,6 @@ class ResponsePlusAdmin(ResponseAdmin):
         return survey.title
 
     def get_pdf(self, obj): # noqa
-        ...
-
         return mark_safe(
             f'<a target="_blank" class="button" style="background: purple;"'
             f'href="{reverse("questionnaire:get_result_pdf", args=[obj.pk])}">'

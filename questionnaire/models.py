@@ -48,6 +48,9 @@ class SurveyPlus(Survey):
     def __str__(self):
         return str(self.name)
 
+    # def get_absolute_url(self):
+    #     return reverse("survey-detail", kwargs={'survey_slug': self.slug})
+
 
 class QuestionPlus(Question):
 
