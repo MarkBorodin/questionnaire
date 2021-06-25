@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from django.conf.locale.en import formats as es_formats
+from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -38,7 +39,7 @@ INSTALLED_APPS = [
     'wkhtmltopdf',
     'nested_admin',
     'bootstrapform',
-    'survey'
+    # 'survey'
 ]
 # !!!!!!!!!!!!!
 from pathlib import Path
@@ -142,3 +143,11 @@ WKHTMLTOPDF_CMD = '/usr/bin/wkhtmltopdf'
 
 SE_L10N = False
 es_formats.DATETIME_FORMAT = 'd. m. yy'
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+USER_DID_NOT_ANSWER = getattr(settings, "USER_DID_NOT_ANSWER", "Left blank")
+TEX_CONFIGURATION_FILE = getattr(settings, "TEX_CONFIGURATION_FILE", Path(ROOT, "doc", "example_conf.yaml"))
+SURVEY_DEFAULT_PIE_COLOR = getattr(settings, "SURVEY_DEFAULT_PIE_COLOR", "red!50")
+CHOICES_SEPARATOR = getattr(settings, "CHOICES_SEPARATOR", ",")
+EXCEL_COMPATIBLE_CSV = False
+DEFAULT_SURVEY_PUBLISHING_DURATION = 7

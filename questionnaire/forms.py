@@ -9,35 +9,35 @@ from django.forms import models
 from django.urls import reverse
 from django.utils.text import slugify
 
-from questionnaire.models import AnswerPlus, CategoryPlus, QuestionPlus, ResponsePlus, SurveyPlus
+from questionnaire.models import Answer, Category, Question, Response, Survey
 from questionnaire.signals import survey_completed
 from questionnaire.widgets import ImageSelectWidget
 
 LOGGER = logging.getLogger(__name__)
 
 
-class ResponsePlusForm(models.ModelForm):
+class ResponseForm(models.ModelForm):
 
     FIELDS = {
-        QuestionPlus.TEXT: forms.CharField,
-        QuestionPlus.SHORT_TEXT: forms.CharField,
-        QuestionPlus.SELECT_MULTIPLE: forms.MultipleChoiceField,
-        QuestionPlus.INTEGER: forms.IntegerField,
-        QuestionPlus.FLOAT: forms.FloatField,
-        QuestionPlus.DATE: forms.DateField,
+        Question.TEXT: forms.CharField,
+        Question.SHORT_TEXT: forms.CharField,
+        Question.SELECT_MULTIPLE: forms.MultipleChoiceField,
+        Question.INTEGER: forms.IntegerField,
+        Question.FLOAT: forms.FloatField,
+        Question.DATE: forms.DateField,
     }
 
     WIDGETS = {
-        QuestionPlus.TEXT: forms.Textarea,
-        QuestionPlus.SHORT_TEXT: forms.TextInput,
-        QuestionPlus.RADIO: forms.RadioSelect,
-        QuestionPlus.SELECT: forms.Select,
-        QuestionPlus.SELECT_IMAGE: ImageSelectWidget,
-        QuestionPlus.SELECT_MULTIPLE: forms.CheckboxSelectMultiple,
+        Question.TEXT: forms.Textarea,
+        Question.SHORT_TEXT: forms.TextInput,
+        Question.RADIO: forms.RadioSelect,
+        Question.SELECT: forms.Select,
+        Question.SELECT_IMAGE: ImageSelectWidget,
+        Question.SELECT_MULTIPLE: forms.CheckboxSelectMultiple,
     }
 
     class Meta:
-        model = ResponsePlus
+        model = Response
         fields = ()
 
     def __init__(self, *args, **kwargs):
@@ -48,13 +48,13 @@ class ResponsePlusForm(models.ModelForm):
             self.step = int(kwargs.pop("step"))
         except KeyError:
             self.step = None
-        super(ResponsePlusForm, self).__init__(*args, **kwargs)
+        super(ResponseForm, self).__init__(*args, **kwargs)
         self.uuid = uuid.uuid4().hex
 
         self.categories = self.survey.non_empty_categories()
         self.qs_with_no_cat = self.survey.questions.filter(category__isnull=True).order_by("order", "id")
 
-        if self.survey.display_method == SurveyPlus.BY_CATEGORY:
+        if self.survey.display_method == Survey.BY_CATEGORY:
             self.steps_count = len(self.categories) + (1 if self.qs_with_no_cat else 0)
         else:
             self.steps_count = len(self.survey.questions.all())
@@ -74,7 +74,7 @@ class ResponsePlusForm(models.ModelForm):
         # add a field for each survey question, corresponding to the question
         # type as appropriate.
 
-        if self.survey.display_method == SurveyPlus.BY_CATEGORY and self.step is not None:
+        if self.survey.display_method == Survey.BY_CATEGORY and self.step is not None:
             if self.step == len(self.categories):
                 qs_for_step = self.survey.questions.filter(category__isnull=True).order_by("order", "id")
             else:
@@ -85,19 +85,19 @@ class ResponsePlusForm(models.ModelForm):
         else:
             for i, question in enumerate(self.survey.questions.all()):
                 not_to_keep = i != self.step and self.step is not None
-                if self.survey.display_method == SurveyPlus.BY_QUESTION and not_to_keep:
+                if self.survey.display_method == Survey.BY_QUESTION and not_to_keep:
                     continue
                 self.add_question(question, data)
 
     def current_categories(self):
-        if self.survey.display_method == SurveyPlus.BY_CATEGORY:
+        if self.survey.display_method == Survey.BY_CATEGORY:
             if self.step is not None and self.step < len(self.categories):
                 return [self.categories[self.step]]
-            return [CategoryPlus(name="No category", description="No cat desc")]
+            return [Category(name="No category", description="No cat desc")]
         else:
             extras = []
             if self.qs_with_no_cat:
-                extras = [CategoryPlus(name="No category", description="No cat desc")]
+                extras = [Category(name="No category", description="No cat desc")]
 
             return self.categories + extras
 
@@ -115,10 +115,10 @@ class ResponsePlusForm(models.ModelForm):
             self.response = None
         else:
             try:
-                self.response = ResponsePlus.objects.prefetch_related("user", "survey").get(
+                self.response = Response.objects.prefetch_related("user", "survey").get(
                     user=self.user, survey=self.survey
                 )
-            except ResponsePlus.DoesNotExist:
+            except Response.DoesNotExist:
                 LOGGER.debug("No saved response for '%s' for user %s", self.survey, self.user)
                 self.response = None
         return self.response
@@ -138,9 +138,9 @@ class ResponsePlusForm(models.ModelForm):
         if response is None:
             self.answers = None
         try:
-            answers = AnswerPlus.objects.filter(response=response).prefetch_related("question")
+            answers = Answer.objects.filter(response=response).prefetch_related("question")
             self.answers = {answer.question.id: answer for answer in answers.all()}
-        except AnswerPlus.DoesNotExist:
+        except Answer.DoesNotExist:
             self.answers = None
 
         return self.answers
@@ -166,7 +166,7 @@ class ResponsePlusForm(models.ModelForm):
         answer = self._get_preexisting_answer(question)
         if answer:
             # Initialize the field with values from the database if any
-            if question.type == QuestionPlus.SELECT_MULTIPLE:
+            if question.type == Question.SELECT_MULTIPLE:
                 initial = []
                 if answer.body == "[]":
                     pass
@@ -204,11 +204,11 @@ class ResponsePlusForm(models.ModelForm):
         :param Question question: The question
         :rtype: List of String or None"""
         qchoices = None
-        if question.type not in [QuestionPlus.TEXT, QuestionPlus.SHORT_TEXT, QuestionPlus.INTEGER, QuestionPlus.FLOAT, QuestionPlus.DATE]:
+        if question.type not in [Question.TEXT, Question.SHORT_TEXT, Question.INTEGER, Question.FLOAT, Question.DATE]:
             qchoices = question.get_choices()
             # add an empty option at the top so that the user has to explicitly
             # select one of the options
-            if question.type in [QuestionPlus.SELECT, QuestionPlus.SELECT_IMAGE]:
+            if question.type in [Question.SELECT, Question.SELECT_IMAGE]:
                 qchoices = tuple([("", "-------------")]) + qchoices
         return qchoices
 
@@ -243,7 +243,7 @@ class ResponsePlusForm(models.ModelForm):
         field = self.get_question_field(question, **kwargs)
         field.widget.attrs["category"] = question.category.name if question.category else ""
 
-        if question.type == QuestionPlus.DATE:
+        if question.type == Question.DATE:
             field.widget.attrs["class"] = "date"
         # logging.debug("Field for %s : %s", question, field.__dict__)
         self.fields["question_%d" % question.pk] = field
@@ -270,7 +270,7 @@ class ResponsePlusForm(models.ModelForm):
         if not self.survey.editable_answers and response is not None:
             return None
         if response is None:
-            response = super(ResponsePlusForm, self).save(commit=False)
+            response = super(ResponseForm, self).save(commit=False)
         response.survey = self.survey
         response.interview_uuid = self.uuid
         if self.user.is_authenticated:
@@ -286,11 +286,11 @@ class ResponsePlusForm(models.ModelForm):
                 # entirely dependent on the way the question_id is encoded in
                 # the field name in the __init__ method of this form class.
                 q_id = int(field_name.split("_")[1])
-                question = QuestionPlus.objects.get(pk=q_id)
+                question = Question.objects.get(pk=q_id)
                 answer = self._get_preexisting_answer(question)
                 if answer is None:
-                    answer = AnswerPlus(question=question)
-                if question.type == QuestionPlus.SELECT_IMAGE:
+                    answer = Answer(question=question)
+                if question.type == Question.SELECT_IMAGE:
                     value, img_src = field_value.split(":", 1)
                     # TODO Handling of SELECT IMAGE
                     LOGGER.debug("Question.SELECT_IMAGE not implemented, please use : %s and %s", value, img_src)
@@ -299,5 +299,5 @@ class ResponsePlusForm(models.ModelForm):
                 LOGGER.debug("Creating answer for question %d of type %s : %s", q_id, answer.question.type, field_value)
                 answer.response = response
                 answer.save()
-        survey_completed.send(sender=ResponsePlus, instance=response, data=data)
+        survey_completed.send(sender=Response, instance=response, data=data)
         return response

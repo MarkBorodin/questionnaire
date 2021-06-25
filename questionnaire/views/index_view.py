@@ -3,12 +3,12 @@ from datetime import date
 
 from django.views.generic import TemplateView, ListView
 
-from questionnaire.models import SurveyPlus
+from questionnaire.models import Survey
 
 
 # WORKS
 class IndexView(ListView):
     template_name = "questionnaire/list.html"
-    model = SurveyPlus
+    model = Survey
     context_object_name = 'surveys'
 

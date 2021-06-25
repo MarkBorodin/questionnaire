@@ -48,14 +48,14 @@
 				        <div id="collapse{{category.slugify}}" class="panel-collapse collapse show {% if not survey.editable_answers and response_form.response is not None %}in{% endif %}
 				        {{ response_form|collapse_form:category }}">
 				            <div class="panel-body">
-	                           {% include "survey/question.html" %}
+	                           {% include "questionnaire/question.html" %}
                             </div>
 		                </div>
                 </div>
             </div>
         {% empty %}
             <h3> {% trans "Questions" %} </h3>
-            {% include "survey/question.html" %}
+            {% include "questionnaire/question.html" %}
         {% endfor %}
 
         <br>

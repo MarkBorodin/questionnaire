@@ -1,7 +1,7 @@
-from survey.models import Response
+# from survey.models import Response
 from wkhtmltopdf.views import PDFTemplateView
 
-from questionnaire.models import SurveyPlus
+from questionnaire.models import Survey, Response
 
 
 class GetPDF(PDFTemplateView):
@@ -15,5 +15,5 @@ class GetPDF(PDFTemplateView):
         result_obj_id = self.kwargs['id']
         result_obj = Response.objects.get(id=result_obj_id)
         context['result_obj'] = result_obj
-        context['survey'] = SurveyPlus.objects.get(id=result_obj.survey.id)
+        context['survey'] = Survey.objects.get(id=result_obj.survey.id)
         return context

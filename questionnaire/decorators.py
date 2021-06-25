@@ -4,7 +4,7 @@ from functools import wraps
 
 from django.shortcuts import Http404, get_object_or_404
 
-from questionnaire.models import SurveyPlus
+from questionnaire.models import Survey
 
 
 def survey_available(func):
@@ -15,7 +15,7 @@ def survey_available(func):
     @wraps(func)
     def survey_check(self, request, *args, **kwargs):
         survey = get_object_or_404(
-            SurveyPlus.objects.prefetch_related("questions", "questions__category"), is_published=True, slug=kwargs["slug"]
+            Survey.objects.prefetch_related("questions", "questions__category"), is_published=True, slug=kwargs["slug"]
         )
         if not survey.is_published:
             raise Http404

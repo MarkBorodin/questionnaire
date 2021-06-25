@@ -6,8 +6,8 @@ from django.shortcuts import redirect, render, reverse, get_object_or_404
 from django.views.generic import View
 
 from questionnaire.decorators import survey_available
-from questionnaire.forms import ResponsePlusForm
-from questionnaire.models import SurveyPlus
+from questionnaire.forms import ResponseForm
+from questionnaire.models import Survey
 
 LOGGER = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class SurveyDetail(View):
     def get(self, request, *args, **kwargs):
 
         survey = get_object_or_404(
-            SurveyPlus.objects.prefetch_related("questions", "questions__category"), is_published=True,
+            Survey.objects.prefetch_related("questions", "questions__category"), is_published=True,
             slug=kwargs["slug"]
         )
 
@@ -33,7 +33,7 @@ class SurveyDetail(View):
         if survey.need_logged_user and not request.user.is_authenticated:
             return redirect("%s?next=%s" % (settings.LOGIN_URL, request.path))
 
-        form = ResponsePlusForm(survey=survey, user=request.user, step=step)
+        form = ResponseForm(survey=survey, user=request.user, step=step)
         categories = form.current_categories()
 
         asset_context = {
@@ -56,7 +56,7 @@ class SurveyDetail(View):
         if survey.need_logged_user and not request.user.is_authenticated:
             return redirect("%s?next=%s" % (settings.LOGIN_URL, request.path))
 
-        form = ResponsePlusForm(request.POST, survey=survey, user=request.user, step=kwargs.get("step", 0))
+        form = ResponseForm(request.POST, survey=survey, user=request.user, step=kwargs.get("step", 0))
         categories = form.current_categories()
 
         if not survey.editable_answers and form.response is not None:
@@ -93,7 +93,7 @@ class SurveyDetail(View):
         else:
             # when it's the last step
             if not form.has_next_step():
-                save_form = ResponsePlusForm(request.session[session_key], survey=survey, user=request.user)
+                save_form = ResponseForm(request.session[session_key], survey=survey, user=request.user)
                 if save_form.is_valid():
                     response = save_form.save()
                 else:
