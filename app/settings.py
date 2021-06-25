@@ -31,15 +31,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'pdf_generator',
-    'core',
     'questionnaire',
 
     'crispy_forms',
     'wkhtmltopdf',
     'nested_admin',
     'bootstrapform',
-    # 'survey'
 ]
 # !!!!!!!!!!!!!
 from pathlib import Path

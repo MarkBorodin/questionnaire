@@ -6,8 +6,6 @@ from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('pdf_generator.urls')),
-    path('', include('core.urls')),
     path('questionnaire/', include('questionnaire.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
