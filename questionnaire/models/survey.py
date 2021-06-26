@@ -58,7 +58,7 @@ class Survey(models.Model):
             self.display_method = survey_template.display_method
             self.publish_date = now()
             self.expire_date = in_duration_day()
-
+        self.survey_template = None
         super(self.__class__, self).save(*args, **kwargs)
 
     @property

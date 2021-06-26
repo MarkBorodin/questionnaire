@@ -15,7 +15,6 @@ from questionnaire.widgets import ImageSelectWidget
 
 LOGGER = logging.getLogger(__name__)
 
-
 class ResponseForm(models.ModelForm):
 
     FIELDS = {
@@ -256,11 +255,11 @@ class ResponseForm(models.ModelForm):
 
     def next_step_url(self):
         if self.has_next_step():
-            context = {"id": self.survey.id, "step": self.step + 1}
-            return reverse("survey-detail-step", kwargs=context)
+            context = {"slug": self.survey.slug, "step": self.step + 1}
+            return reverse("questionnaire:survey-detail-step", kwargs=context)
 
     def current_step_url(self):
-        return reverse("survey-detail-step", kwargs={"id": self.survey.id, "step": self.step})
+        return reverse("survey-detail-step", kwargs={"slug": self.survey.slug, "step": self.step})
 
     def save(self, commit=True):
         """ Save the response object """

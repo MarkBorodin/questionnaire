@@ -36,7 +36,7 @@ class SurveyAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
     # actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
     prepopulated_fields = {'slug': ('client', 'title'), }
-    exclude = ['display_method', 'template']
+    exclude = ['template']
 
 
 class SurveyTemplateAdmin(admin.ModelAdmin):

@@ -13,7 +13,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class SurveyDetail(View):
-    # @survey_available
+    @survey_available
     def get(self, request, *args, **kwargs):
 
         survey = get_object_or_404(
