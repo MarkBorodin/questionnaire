@@ -21,7 +21,7 @@ class Survey(models.Model):
 
     DISPLAY_METHOD_CHOICES = [
         (BY_QUESTION, _("By question")),
-        (BY_CATEGORY, _("By category")),
+        # (BY_CATEGORY, _("By category")),
         (ALL_IN_ONE_PAGE, _("All in one page")),
     ]
 
@@ -58,7 +58,6 @@ class Survey(models.Model):
             self.display_method = survey_template.display_method
             self.publish_date = now()
             self.expire_date = in_duration_day()
-        self.survey_template = None
         super(self.__class__, self).save(*args, **kwargs)
 
     @property

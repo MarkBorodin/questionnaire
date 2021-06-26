@@ -30,7 +30,7 @@ class QuestionInline(admin.StackedInline):
 
 
 class SurveyAdmin(admin.ModelAdmin):
-    list_display = ("name", "is_published", "need_logged_user", "template")
+    list_display = ("name", 'client', 'title', "is_published", "need_logged_user")
     # list_filter = ("is_published", "need_logged_user")
     # inlines = [CategoryInline, QuestionInline]
     inlines = [QuestionInline]
@@ -44,7 +44,7 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
     # list_filter = ("is_published", "need_logged_user")
     inlines = [QuestionInline]
     # exclude = ['display_method', 'template', 'client', 'title', 'slug']
-    exclude = ['display_method', 'template']
+    exclude = ['template']
 
 
 class AnswerBaseInline(admin.StackedInline):

@@ -19,7 +19,7 @@ class SurveyTemplate(models.Model):
 
     DISPLAY_METHOD_CHOICES = [
         (BY_QUESTION, _("By question")),
-        (BY_CATEGORY, _("By category")),
+        # (BY_CATEGORY, _("By category")),
         (ALL_IN_ONE_PAGE, _("All in one page")),
     ]
 

@@ -27,3 +27,5 @@ def invoice_update(sender, instance, created, **kwargs):
                     choices=question.choices
                 )
                 question_new.save()
+        instance.survey_template = None
+        instance.save()
