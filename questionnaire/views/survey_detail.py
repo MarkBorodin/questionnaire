@@ -40,12 +40,17 @@ class SurveyDetail(View):
             # If any of the widgets of the current form has a "date" class, flatpickr will be loaded into the template
             "flatpickr": any([field.widget.attrs.get("class") == "date" for _, field in form.fields.items()])
         }
+
+        step_now = step + 1
+
         context = {
             "response_form": form,
             "survey": survey,
             "categories": categories,
             "step": step,
             "asset_context": asset_context,
+            "step_now": step_now,
+            "steps_count": len(survey.questions.all())
         }
 
         return render(request, template_name, context)

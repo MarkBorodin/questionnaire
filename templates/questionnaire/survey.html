@@ -42,10 +42,12 @@ Marketing monkeys
 	<div class="survey-description" style="font-style: oblique;"><strong>{{survey.description|safe}}</strong></div>
 	<div>
       {% if step and step != 0 %}
+		<h3>question {{ step_now }} of {{ steps_count }}</h3>
 		<form action="{% url 'questionnaire:survey-detail-step' slug=survey.slug step=step %}" method="post">
 	{% else %}
 		<form action="{% url 'questionnaire:survey-detail' slug=survey.slug %}" method="post">
 	{% endif %}
+	{% if step == 0 %} <h3>question 1 of {{ steps_count }}</h3> {% endif %}
 	    {% csrf_token %}
         {% for category in categories %}
 			<br>
