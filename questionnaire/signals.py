@@ -36,4 +36,6 @@ def if_completed(sender, instance, created, **kwargs):
     if created:
         survey = Survey.objects.get(id=instance.survey.id)
         survey.completed = True
+        if survey.sent is False:
+            survey.sent = True
         survey.save()

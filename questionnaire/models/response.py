@@ -29,8 +29,8 @@ class Response(models.Model):
     interview_uuid = models.CharField(_("Interview unique identifier"), max_length=36)
 
     class Meta:
-        verbose_name = _("Set of answers to surveys")
-        verbose_name_plural = _("Sets of answers to surveys")
+        verbose_name = _("Response")
+        verbose_name_plural = _("Responses")
 
     def __str__(self):
         msg = f"Response to {self.survey} by {self.user}"

@@ -31,7 +31,7 @@ class ResponseForm(models.ModelForm):
         Question.SHORT_TEXT: forms.TextInput,
         Question.RADIO: forms.RadioSelect,
         Question.SELECT: forms.Select,
-        Question.SELECT_IMAGE: ImageSelectWidget,
+        # Question.SELECT_IMAGE: ImageSelectWidget,
         Question.SELECT_MULTIPLE: forms.CheckboxSelectMultiple,
     }
 
@@ -207,7 +207,8 @@ class ResponseForm(models.ModelForm):
             qchoices = question.get_choices()
             # add an empty option at the top so that the user has to explicitly
             # select one of the options
-            if question.type in [Question.SELECT, Question.SELECT_IMAGE]:
+            if question.type in [Question.SELECT]:
+            # if question.type in [Question.SELECT, Question.SELECT_IMAGE]:
                 qchoices = tuple([("", "-------------")]) + qchoices
         return qchoices
 
@@ -289,10 +290,10 @@ class ResponseForm(models.ModelForm):
                 answer = self._get_preexisting_answer(question)
                 if answer is None:
                     answer = Answer(question=question)
-                if question.type == Question.SELECT_IMAGE:
-                    value, img_src = field_value.split(":", 1)
+                # if question.type == Question.SELECT_IMAGE:
+                #     value, img_src = field_value.split(":", 1)
                     # TODO Handling of SELECT IMAGE
-                    LOGGER.debug("Question.SELECT_IMAGE not implemented, please use : %s and %s", value, img_src)
+                    # LOGGER.debug("Question.SELECT_IMAGE not implemented, please use : %s and %s", value, img_src)
                 answer.body = field_value
                 data["responses"].append((answer.question.id, answer.body))
                 LOGGER.debug("Creating answer for question %d of type %s : %s", q_id, answer.question.type, field_value)
