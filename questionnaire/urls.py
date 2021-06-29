@@ -13,6 +13,7 @@ urlpatterns = [
     path("", IndexView.as_view(), name="survey-list"),
     path("<slug:slug>", SurveyDetail.as_view(), name="survey-detail"),
     path("get_result_pdf/<int:id>", GetPDF.as_view(), name="get_result_pdf"),
+    path("view_result_pdf/<int:id>", GetPDF.as_view(), name="view_result_pdf"),
 
     # url(r"^csv/(?P<primary_key>\d+)/", serve_result_csv, name="survey-result"),
     url(r"^(?P<slug>\d+)/completed/", SurveyCompleted.as_view(), name="survey-completed"),

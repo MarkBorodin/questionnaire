@@ -75,7 +75,7 @@ class Survey(models.Model):
         return min_
 
     # def get_absolute_url(self):
-    #     return reverse("survey-detail", kwargs={"slug": self.slug})
+    #     return reverse("questionnaire:survey-detail", kwargs={"slug": self.slug})
 
     def non_empty_categories(self):
         return [x for x in list(self.categories.order_by("order", "id")) if x.questions.count() > 0]

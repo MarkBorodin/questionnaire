@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'nested_admin',
     'bootstrapform',
 ]
-# !!!!!!!!!!!!!
+
+# !
 from pathlib import Path
 CSV_DIRECTORY = Path("media/")
 TEX_DIRECTORY = Path("media/")
-# !!!!!!!!!!!!!
+# !
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

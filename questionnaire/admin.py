@@ -30,13 +30,25 @@ class QuestionInline(admin.StackedInline):
 
 
 class SurveyAdmin(admin.ModelAdmin):
-    list_display = ("name", 'client', 'title', "is_published", "need_logged_user")
+    list_display = ("name", 'client', 'title', 'url_address', "is_published")
     # list_filter = ("is_published", "need_logged_user")
     # inlines = [CategoryInline, QuestionInline]
     inlines = [QuestionInline]
     # actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
     prepopulated_fields = {'slug': ('client', 'title'), }
     exclude = ['template']
+    list_filter = ('client', 'is_published')
+    search_fields = ['client', 'title', 'name', 'slug', 'description']
+
+    def get_queryset(self, request):
+        qs = super(SurveyAdmin, self).get_queryset(request)
+        self.request = request # noqa
+        return qs
+
+    def url_address(self, obj): # noqa
+        address = reverse('questionnaire:survey-detail', kwargs={"slug": obj.slug})
+        address = self.request.get_host() + address
+        return address
 
 
 class SurveyTemplateAdmin(admin.ModelAdmin):
@@ -45,6 +57,7 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
     inlines = [QuestionInline]
     # exclude = ['display_method', 'template', 'client', 'title', 'slug']
     exclude = ['template']
+    search_fields = ['name', 'description']
 
 
 class AnswerBaseInline(admin.StackedInline):
@@ -55,12 +68,13 @@ class AnswerBaseInline(admin.StackedInline):
 
 
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ("client", 'name', 'title', "interview_uuid", 'get_pdf')
+    list_display = ("client", 'name', 'title', "interview_uuid", 'view_pdf', 'get_pdf')
     list_filter = ("survey", "created")
     date_hierarchy = "created"
     inlines = [AnswerBaseInline]
     # specifies the order as well as which fields to act on
     readonly_fields = ("survey", "created", "updated", "interview_uuid", "user")
+    search_fields = ['survey__client', 'survey__title', 'survey__name', 'survey__slug', 'survey__description']
 
     def client(self, obj):  # noqa
         survey = Survey.objects.get(id=obj.survey.id)  # noqa
@@ -73,6 +87,13 @@ class ResponseAdmin(admin.ModelAdmin):
     def title(self, obj):  # noqa
         survey = Survey.objects.get(id=obj.survey.id)  # noqa
         return survey.title
+
+    def view_pdf(self, obj): # noqa
+        return mark_safe(
+            f'<a target="_blank" class="button" style="background: blue;"'
+            f'href="{reverse("questionnaire:view_result_pdf", args=[obj.pk])}">'
+            f'View result pdf</a>'
+        )
 
     def get_pdf(self, obj): # noqa
         return mark_safe(
