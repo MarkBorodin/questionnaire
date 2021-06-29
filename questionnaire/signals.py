@@ -4,14 +4,14 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 # from survey.models import Response, Question
 
-from questionnaire.models import Survey, Question
+from questionnaire.models import Survey, Question, Response
 from questionnaire.models.survey_template import SurveyTemplate
 
 survey_completed = django.dispatch.Signal(providing_args=["instance", "data"])
 
 
 @receiver(post_save, sender=Survey)
-def invoice_update(sender, instance, created, **kwargs):
+def create_questions_to_survey(sender, instance, created, **kwargs):
     if created:
         if instance.survey_template is not None:
             survey_template = SurveyTemplate.objects.get(id=instance.survey_template.id)
@@ -29,3 +29,11 @@ def invoice_update(sender, instance, created, **kwargs):
                 question_new.save()
         instance.survey_template = None
         instance.save()
+
+
+@receiver(post_save, sender=Response)
+def if_completed(sender, instance, created, **kwargs):
+    if created:
+        survey = Survey.objects.get(id=instance.survey.id)
+        survey.completed = True
+        survey.save()

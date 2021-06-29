@@ -23,12 +23,12 @@
 
 {% block body %}
 <div id="intro" style="margin-top: 100px; margin-left: 50px;">
-	<h1 style="text-align: center;">Results for "{{survey}}":</h1><br>
+	<h1 style="text-align: center; color: white;"><strong>Results for "{{survey}}":</strong></h1><br>
 
 		<ul>
 			{% for question in survey.questions.all %}
 
-				<li><h3>Question: <em style="font-style: italic;">{{question.text}}</em></h3>
+				<li><h3 id="question">Question: <em style="font-style: italic;">{{question.text}}</em></h3>
 
 					{% for answer in question.answers.all %}
 

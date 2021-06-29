@@ -41,6 +41,8 @@ class Survey(models.Model):
     title = models.CharField(max_length=256, null=False, blank=False)
     slug = models.SlugField(max_length=256, unique=True, null=False, blank=False, verbose_name="URL")
     survey_template = models.ForeignKey(to=SurveyTemplate, null=True, blank=True, on_delete=models.SET_NULL)
+    sent = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _("survey")

@@ -5,8 +5,6 @@
 
 
 {% block style %}
-
-
 body {
     height: 100%;
     background: url({% static "common/img/bg1.jpg" %}) no-repeat center center fixed;
@@ -16,15 +14,12 @@ body {
     background-size: cover;
     background-attachment: fixed;
        }
-
 {% endblock %}
 
 
-
-
-
-
-{% block title %} {{survey.name}} {% endblock title %}
+{% block title %}
+Marketing monkeys
+{% endblock title %}
 
 {% block extrajs %}
   {{response_form.media}}
@@ -43,8 +38,8 @@ body {
 
 
 {% block body %}
-	<h1 style="font-style: oblique;"> {{survey.name}} </h1>
-	<div class="survey-description" style="font-style: oblique;"> {{survey.description|safe}} </div>
+	<h1 style="color: white;"><strong>{{survey.name}}</strong></h1>
+	<div class="survey-description" style="font-style: oblique;"><strong>{{survey.description|safe}}</strong></div>
 	<div>
       {% if step and step != 0 %}
 		<form action="{% url 'questionnaire:survey-detail-step' slug=survey.slug step=step %}" method="post">

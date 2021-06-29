@@ -1,16 +1,21 @@
 {% extends 'questionnaire/base.html' %}
 {% load i18n %}
 
+{% block title %}
+Marketing monkeys
+{% endblock title %}
+
 {% block body %}
 <div id="intro">
-	<h1>Welcome to the Django Survey app</h1>
+	<h1 style="color: white;"><strong>Survey app</strong></h1><br>
 
 		<ul>
 			{% for survey in surveys %}
 
-				<li><a href="{% url 'questionnaire:survey-detail' slug=survey.slug %}">{{survey.name}}</a></li>
+				<li style="color: white;"><a style="color: purple;" href="{% url 'questionnaire:survey-detail' slug=survey.slug %}"><strong>{{survey.name}}</strong></a></li>
 
 			{% endfor %}
 		</ul>
+
 </div>
 {% endblock %}

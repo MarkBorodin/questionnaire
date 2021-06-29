@@ -30,15 +30,17 @@ class QuestionInline(admin.StackedInline):
 
 
 class SurveyAdmin(admin.ModelAdmin):
-    list_display = ("name", 'client', 'title', 'url_address', "is_published")
+    list_display = ("name", 'client', 'title', 'url_address', 'sent', 'completed', "is_published")
     # list_filter = ("is_published", "need_logged_user")
     # inlines = [CategoryInline, QuestionInline]
     inlines = [QuestionInline]
     # actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
     prepopulated_fields = {'slug': ('client', 'title'), }
     exclude = ['template']
-    list_filter = ('client', 'is_published')
-    search_fields = ['client', 'title', 'name', 'slug', 'description']
+    list_filter = ('client', 'is_published', 'sent', 'completed',)
+    search_fields = ['client', 'title', 'name', 'slug', 'description', 'sent', 'completed']
+    list_editable = ['sent']
+    readonly_fields = ['completed']
 
     def get_queryset(self, request):
         qs = super(SurveyAdmin, self).get_queryset(request)
