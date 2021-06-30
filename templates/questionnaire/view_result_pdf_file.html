@@ -6,7 +6,7 @@
 
 {% block style %}
 
-#page_1 #p1img1 {position:absolute;top:0px;left:0px;z-index:-1;width:1694px;height:1415px;opacity: 0.3;}
+#page_1 #p1img1 {position:absolute;top:0px;left:0px;z-index:-1;width:1694px;height:1415px;opacity: 0.25;}
 
 {% endblock %}
 
@@ -23,16 +23,16 @@
 
 {% block body %}
 <div id="intro" style="margin-top: 100px; margin-left: 50px;">
-	<h1 style="text-align: center; color: white;"><strong>Results for "{{survey}}":</strong></h1><br>
+	<h1 class="h1_1" style="text-align: center; color: #4B0082 !important; border-bottom-style: solid; padding: 10px;"><strong style="color: #4B0082 !important;">Results for "{{survey}}"</strong></h1><br>
 
 		<ul>
 			{% for question in survey.questions.all %}
 
-				<li><h3 id="question">Question: <em style="font-style: italic;">{{question.text}}</em></h3>
+				<li style="opacity: 0.9;"><h3 id="question"><strong style="color: #191970 !important;">Question: </strong><em style="font-style: italic;">{{question.text}}</em></h3>
 
 					{% for answer in question.answers.all %}
 
-						<p>Answer: <b style="font-style: italic;">{{answer.body}}</b></p><br>
+							<p><strong style="color: purple !important;">Answer: </strong><b style="font-style: italic;">{{answer.body}}</b></p><br>
 
 					{% endfor %}
 				</li>
