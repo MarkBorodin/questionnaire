@@ -7,4 +7,6 @@
 <h1>{% trans "Survey completed" %}</h1>
 <p> {% trans "Sorry! Your already replied to our survey" %} "{{ survey.name }}". </p>
 <p> <a href="{% url 'questionnaire:survey-list' %}">{% trans "Back to survey list" %}</a> </p>
+
+<input type=button class="btn btn-default btn-lg" style="opacity: 0.8;" value="Previous page" onClick="javascript:history.go(-1);">
 {% endblock %}

@@ -6,6 +6,7 @@ from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+from questionnaire.exporter.csv import Survey2Csv
 from questionnaire.models import Answer, Category, Question, Response, Survey
 from questionnaire.models.survey_template import SurveyTemplate
 
@@ -35,6 +36,7 @@ class SurveyAdmin(admin.ModelAdmin):
     # inlines = [CategoryInline, QuestionInline]
     inlines = [QuestionInline]
     # actions = [make_published, Survey2Csv.export_as_csv, Survey2Tex.export_as_tex]
+    actions = [Survey2Csv.export_as_csv]
     prepopulated_fields = {'slug': ('client', 'title'), }
     exclude = ['template']
     list_filter = ('client', 'is_published', 'sent', 'completed',)
@@ -70,7 +72,7 @@ class AnswerBaseInline(admin.StackedInline):
 
 
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ("client", 'name', 'title', "interview_uuid", 'view_pdf', 'get_pdf')
+    list_display = ("client", 'name', 'title', "interview_uuid", 'view_pdf', 'get_pdf', 'get_csv')
     list_filter = ("survey", "created")
     date_hierarchy = "created"
     inlines = [AnswerBaseInline]
@@ -103,6 +105,15 @@ class ResponseAdmin(admin.ModelAdmin):
             f'href="{reverse("questionnaire:get_result_pdf", args=[obj.pk])}">'
             f'Get result pdf</a>'
         )
+
+
+    def get_csv(self, obj): # noqa
+        return mark_safe(
+            f'<a target="_blank" class="button" style="background: orange;"'
+            f'href="{reverse("questionnaire:survey-result", args=[obj.survey.id])}">'
+            f'Get result csv</a>'
+        )
+
 
 
 # admin.site.register(Question, QuestionInline)

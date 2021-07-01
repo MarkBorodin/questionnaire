@@ -80,13 +80,13 @@ Marketing monkeys
         <br>
 		{% if survey.editable_answers or response_form.response is None %}
 	    {% if response_form.has_next_step %}
-				    <input
+				    {% if step and step != 0 %}<input type=button class="btn btn-default btn-lg" style="margin-right: 10px;" value="Previous page" onClick="javascript:history.go(-1);">{% endif %}<input
   			          class="btn btn-default btn-lg"
 				        type="submit"
 				        value="{% trans "Next!" %}"
         			>
 				{% else %}
-				    <input
+				    <input type=button class="btn btn-default btn-lg" style="margin-right: 10px;" value="Previous page" onClick="javascript:history.go(-1);"><input
   			          class="btn btn-default btn-lg"
 				        type="submit"
 				        value="{% trans "I'm done!" %}"
