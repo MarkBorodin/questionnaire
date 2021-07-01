@@ -16,5 +16,6 @@
     {% endif %}
 </p>
 
-<input type=button class="btn btn-default btn-lg" style="opacity: 0.8;" value="Previous page" onClick="javascript:history.go(-1);">
+<!--<input type=button class="btn btn-default btn-lg" style="opacity: 0.8;" value="Previous page" onClick="javascript:history.go(-1);">-->
+<a href="{% url 'questionnaire:survey-detail' slug=response.survey.slug %}"><input type="button" class="btn btn-default btn-lg" style="opacity: 0.8;" value="Start over"></a>
 {% endblock %}
