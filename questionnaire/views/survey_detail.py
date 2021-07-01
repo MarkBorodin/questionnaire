@@ -102,6 +102,7 @@ class SurveyDetail(View):
                 if save_form.is_valid():
                     response = save_form.save()
                 else:
+                    response = save_form.save()
                     LOGGER.warning("A step of the multipage form failed but should have been discovered before.")
         # if there is a next step
         if next_url is not None:
