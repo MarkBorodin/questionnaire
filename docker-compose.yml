@@ -1,6 +1,7 @@
 version: "3.3"
 
 services:
+
   backend:
     container_name: questionnaire_backend
     build: .
@@ -10,6 +11,7 @@ services:
       - static_content:/var/www/pdf_generator
     ports:
       - 8020:8000
+
   nginx:
     container_name: questionnaire_nginx
     image: nginx:1.19-alpine
@@ -21,6 +23,24 @@ services:
       - 444:443
     depends_on:
       - backend
+#
+#  redis:
+#    image: redis
+#    env_file: .env
+#    restart: always
+#
+#  celery:
+#    env_file: .env
+#    build: .
+#    command: ./commands/start_celery.sh
+#    restart: always
+#    depends_on:
+#      - redis
+#    environment:
+#      - DJANGO_SETTINGS_MODULE=app.settings.${RUN_MODE}
+#    volumes:
+#      - ./:/srv
+#      - ./commands:/srv/commands
 
 volumes:
   pgdata: {}

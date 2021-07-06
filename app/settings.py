@@ -3,6 +3,10 @@ from pathlib import Path
 from django.conf.locale.en import formats as es_formats
 from django.conf import settings
 
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())  # take environment variables from .env.
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -11,7 +15,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7c+ocjtn$oti8((y)7jv-)ij2-3a%_avo37f=i$i7x^x3cd%lg'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -150,10 +154,14 @@ CHOICES_SEPARATOR = getattr(settings, "CHOICES_SEPARATOR", ",")
 EXCEL_COMPATIBLE_CSV = False
 DEFAULT_SURVEY_PUBLISHING_DURATION = 7
 
+# email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_RECIPIENT = 'email.checker2021@gmail.com'
-EMAIL_HOST_USER = 'email.checker2021@gmail.com'
-EMAIL_HOST_PASSWORD = 'emailchecker2021emailchecker2021'
+EMAIL_HOST_RECIPIENT = os.getenv('EMAIL_HOST_RECIPIENT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+# celery
+CELERY_NUM_WORKERS = 2
