@@ -1,10 +1,17 @@
+from io import StringIO
+
 from django.shortcuts import get_object_or_404, redirect
 from wkhtmltopdf.views import PDFTemplateView
 from django.contrib import messages
+import csv
+
+from django.core.mail import EmailMessage
+from app.settings import EMAIL_HOST_USER
 from questionnaire.models import Survey, Response
 from django.conf import settings
 import csv
 from django.http import HttpResponse
+from django.core.mail import send_mail
 
 
 class GetPDF(PDFTemplateView):
@@ -26,16 +33,8 @@ class GetPDF(PDFTemplateView):
         return context
 
 
-def get_serve_result_csv(request, primary_key):
-    """... only if the survey does not require login or the user is logged.
-
-    :param int primary_key: The primary key of the survey."""
-
+def get_data_for_csv(primary_key):
     survey = get_object_or_404(Survey, pk=primary_key)
-    if not survey.is_published:
-        messages.error(request, "This survey has not been published")
-        return redirect("%s?next=%s" % (settings.LOGIN_URL, request.path))
-
     questions = survey.questions.all()
     answers_list = []
     questions_list = []
@@ -43,12 +42,33 @@ def get_serve_result_csv(request, primary_key):
         answer = question.answers_as_text
         answers_list.append(answer[0])
         questions_list.append(question.text)
+    return questions_list, answers_list
 
+
+def get_survey_result_csv(request, primary_key):
+    survey = get_object_or_404(Survey, pk=primary_key)
+    questions_list, answers_list = get_data_for_csv(primary_key)
     response = HttpResponse(content_type="text/csv")
     response["Content-Disposition"] = f"attachment;filename={survey.name}.csv"
     writer = csv.writer(response)
+    writer.writerow(questions_list)
+    writer.writerow(answers_list)
+    return response
 
+
+def send_an_email_about_the_end_of_the_survey(primary_key):
+    survey = get_object_or_404(Survey, pk=primary_key)
+    questions_list, answers_list = get_data_for_csv(primary_key)
+    csv_file = StringIO()
+    writer = csv.writer(csv_file)
     writer.writerow(questions_list)
     writer.writerow(answers_list)
 
-    return response
+    email = EmailMessage(
+        subject=f'Customer "{survey.client}" survey results!',
+        body=f"""The survey results are in the attached file\nClient: {survey.client}\nTitle: {survey.title}""",
+        from_email=EMAIL_HOST_USER,
+        to=['rens2588@gmail.com'],
+    )
+    email.attach(f'{survey.name}.csv', csv_file.getvalue(), 'text/csv')
+    email.send()
