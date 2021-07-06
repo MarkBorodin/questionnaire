@@ -23,24 +23,24 @@ services:
       - 444:443
     depends_on:
       - backend
-#
-#  redis:
-#    image: redis
-#    env_file: .env
-#    restart: always
-#
-#  celery:
-#    env_file: .env
-#    build: .
-#    command: ./commands/start_celery.sh
-#    restart: always
-#    depends_on:
-#      - redis
-#    environment:
-#      - DJANGO_SETTINGS_MODULE=app.settings.${RUN_MODE}
-#    volumes:
-#      - ./:/srv
-#      - ./commands:/srv/commands
+
+  redis:
+    image: redis
+    env_file: .env
+    restart: always
+
+  celery:
+    env_file: .env
+    build: .
+    command: ./commands/start_celery.sh
+    restart: always
+    depends_on:
+      - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+    volumes:
+      - ./:/srv
+      - ./commands:/srv/commands
 
 volumes:
   pgdata: {}
