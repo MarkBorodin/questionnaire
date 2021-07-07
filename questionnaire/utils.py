@@ -1,17 +1,13 @@
 from io import StringIO
 
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from wkhtmltopdf.views import PDFTemplateView
-from django.contrib import messages
-import csv
 
 from django.core.mail import EmailMessage
 from app.settings import EMAIL_HOST_USER
 from questionnaire.models import Survey, Response
-from django.conf import settings
 import csv
 from django.http import HttpResponse
-from django.core.mail import send_mail
 
 
 class GetPDF(PDFTemplateView):

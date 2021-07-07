@@ -1,10 +1,10 @@
 from io import StringIO
 
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 
 from django.core.mail import EmailMessage
 from app.settings import EMAIL_HOST_USER
-from questionnaire.models import Survey, Response
+from questionnaire.models import Survey
 import csv
 from celery import shared_task
 

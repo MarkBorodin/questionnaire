@@ -25,11 +25,13 @@ services:
       - backend
 
   redis:
+    container_name: questionnaire_redis
     image: redis
     env_file: .env
     restart: always
 
   celery:
+    container_name: questionnaire_celery
     env_file: .env
     build: .
     command: ./commands/start_celery.sh

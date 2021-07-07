@@ -2,11 +2,9 @@ import django.dispatch
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-# from survey.models import Response, Question
 
 from questionnaire.models import Survey, Question, Response
 from questionnaire.models.survey_template import SurveyTemplate
-from questionnaire.utils import send_an_email_about_the_end_of_the_survey
 
 survey_completed = django.dispatch.Signal(providing_args=["instance", "data"])
 
