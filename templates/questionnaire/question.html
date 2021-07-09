@@ -1,4 +1,5 @@
 {% load bootstrap %}
+{% load survey_extras %}
 
 <table class="table table-hover">
     <!--<thead>
@@ -12,7 +13,7 @@
 	{% if form.field.widget.attrs.category == category.name or not form.field.widget.attrs.category %}
         <tr class="{% if form.errors%} danger {% endif %}">
             <td>
-	            {{ form.label|safe }}
+	            <b style="padding-bottom: 40px;">{{ form.label|safe }}</b><br>
 	            {% if form.field.required %}
 	                <span class="glyphicon glyphicon-asterisk" style="color:red"> </span>
 	            {% endif %}
@@ -22,9 +23,11 @@
                 {% if form.field.widget.input_type == 'select' %}
                 <select name="{{form.name}}"{% if form.field.widget.attrs.disabled %} disabled{% endif %}>
                 {% endif %}
+
 	            {% for field in form %}
-		            {{ field }} <br>
+                     {{ field }} <br>
                 {% endfor%}
+
                 {% if form.field.widget.input_type == 'select' %}
                 </select>
                 {% endif %}

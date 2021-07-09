@@ -24,8 +24,9 @@ def send_an_email_about_the_end_of_the_survey(primary_key):
     writer.writerow(answers_list)
 
     email = EmailMessage(
-        subject=f"The client's '{survey.client}' survey results ",
-        body=f"""The survey results are in the attached file\nClient: {survey.client}\nTitle: {survey.title}\nName: {survey.name}""", # noqa
+        subject=survey.email_text.subject if survey.email_text else f"The client's '{survey.client}' survey results ",
+        body=survey.email_text.body if survey.email_text else
+        f"""The survey results are in the attached file\nClient: {survey.client}\nTitle: {survey.title}\nName: {survey.name}""", # noqa
         from_email=EMAIL_HOST_USER,
         to=admins_emails,
     )

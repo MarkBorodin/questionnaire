@@ -4,18 +4,18 @@
 {% block title %}{% trans "Survey submitted" %}{% endblock title %}
 
 {% block body %}
-<h1>{% trans "Survey submitted"%}</h1>
+<h1>{% if response.survey.global_text %}{{ response.survey.global_text.survey_submitted }}{% else %}{% trans "Survey submitted"%}{% endif %}</h1>
 <p>
     <div class="alert alert-success">
-       {% trans "Thanks! Your answers have been saved" %}
+       {% if response.survey.global_text %}{{ response.survey.global_text.answers_have_been_saved }}{% else %}{% trans "Thanks! Your answers have been saved" %}{% endif %}
     </div>
     {% if response.survey.editable_answers %}
         <div class="alert alert-info">
-           {% trans "You can always come back and change them." %}
+           {% if response.survey.global_text %}{{ response.survey.global_text.you_can_change_answers }}{% else %}{% trans "You can always come back and change them." %}{% endif %}
         </div>
     {% endif %}
 </p>
-
-<!--<input type=button class="btn btn-default btn-lg" style="opacity: 0.8;" value="Previous page" onClick="javascript:history.go(-1);">-->
-<a href="{% url 'questionnaire:survey-detail' slug=response.survey.slug %}"><input type="button" class="btn btn-default btn-lg" style="opacity: 0.8;" value="Start over"></a>
+{% if response.survey.editable_answers%}
+<a href="{% url 'questionnaire:survey-detail' slug=response.survey.slug %}"><input type="button" class="btn btn-default btn-lg" style="opacity: 0.8;" value="{% if response.survey.global_text %}{{ response.survey.global_text.button_start_over }}{% else %}Start over{% endif %}"></a>
+{% endif %}
 {% endblock %}

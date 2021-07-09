@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
+from questionnaire.models.email_text import EmailText
+from questionnaire.models.global_text import GlobalText
 from questionnaire.models.survey_template import SurveyTemplate
 
 
@@ -41,6 +43,8 @@ class Survey(models.Model):
     title = models.CharField(max_length=256, null=False, blank=False)
     slug = models.SlugField(max_length=256, unique=True, null=False, blank=False, verbose_name="URL")
     survey_template = models.ForeignKey(to=SurveyTemplate, null=True, blank=True, on_delete=models.SET_NULL)
+    global_text = models.ForeignKey(to=GlobalText, null=True, blank=True, on_delete=models.SET_NULL)
+    email_text = models.ForeignKey(to=EmailText, null=True, blank=True, on_delete=models.SET_NULL)
     sent = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
 
@@ -60,6 +64,7 @@ class Survey(models.Model):
             self.display_method = survey_template.display_method
             self.publish_date = now()
             self.expire_date = in_duration_day()
+            self.global_text = survey_template.global_text
         super(self.__class__, self).save(*args, **kwargs)
 
     @property

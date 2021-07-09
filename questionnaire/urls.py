@@ -5,7 +5,7 @@ from django.urls import path
 
 from questionnaire.utils import GetPDF, get_survey_result_csv
 from questionnaire.views import ConfirmView, IndexView, SurveyCompleted, SurveyDetail
-from questionnaire.views.survey_result import serve_result_csv
+# from questionnaire.views.survey_result import serve_result_csv
 
 app_name = 'questionnaire'
 

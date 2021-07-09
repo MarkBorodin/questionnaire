@@ -8,6 +8,8 @@ from django.utils.safestring import mark_safe
 
 from questionnaire.exporter.csv import Survey2Csv
 from questionnaire.models import Answer, Category, Question, Response, Survey
+from questionnaire.models.email_text import EmailText
+from questionnaire.models.global_text import GlobalText
 from questionnaire.models.survey_template import SurveyTemplate
 
 
@@ -120,4 +122,5 @@ class ResponseAdmin(admin.ModelAdmin):
 admin.site.register(Survey, SurveyAdmin)
 admin.site.register(Response, ResponseAdmin)
 admin.site.register(SurveyTemplate, SurveyTemplateAdmin)
-
+admin.site.register(GlobalText)
+admin.site.register(EmailText)

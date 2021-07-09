@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
+from questionnaire.models.global_text import GlobalText
+
 
 def in_duration_day():
     return now() + timedelta(days=settings.DEFAULT_SURVEY_PUBLISHING_DURATION)
@@ -34,10 +36,7 @@ class SurveyTemplate(models.Model):
     template = models.CharField(_("Template"), max_length=255, null=True, blank=True)
     publish_date = models.DateField(_("Publication date"), blank=True, null=False, default=now)
     expire_date = models.DateField(_("Expiration date"), blank=True, null=False, default=in_duration_day)
-
-    # client = models.CharField(max_length=256, null=True, blank=True)
-    # title = models.CharField(max_length=256, null=True, blank=True)
-    # slug = models.SlugField(max_length=256, unique=True, null=True, blank=True, verbose_name="URL")
+    global_text = models.ForeignKey(to=GlobalText, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = _("template")
