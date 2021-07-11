@@ -1,7 +1,7 @@
 {% load bootstrap %}
 {% load survey_extras %}
 
-<table class="table table-hover">
+<table class="table table-hover" style="font-weight: 100;">
     <!--<thead>
       <tr>
         <th> Question  </th>
@@ -9,11 +9,12 @@
       </tr>
     </thead> -->
     <tbody>
+<div class="btn-group" data-toggle="buttons">
 {% for form in response_form %}
 	{% if form.field.widget.attrs.category == category.name or not form.field.widget.attrs.category %}
         <tr class="{% if form.errors%} danger {% endif %}">
             <td>
-	            <b style="padding-bottom: 40px;">{{ form.label|safe }}</b><br>
+	            <b style="padding-bottom: 40px; font-size: 20pt;">{{ form.label|safe }}</b><br>
 	            {% if form.field.required %}
 	                <span class="glyphicon glyphicon-asterisk" style="color:red"> </span>
 	            {% endif %}
@@ -25,7 +26,10 @@
                 {% endif %}
 
 	            {% for field in form %}
-                     {{ field }} <br>
+
+                    {% if field.tag and field.choice_label %}<label style="font-weight: normal;">{{ field.tag }} {{ field.choice_label }}<br></label>{% else %}{{ field }}{% endif %}<br>
+
+
                 {% endfor%}
 
                 {% if form.field.widget.input_type == 'select' %}
@@ -35,5 +39,6 @@
         </tr>
 	{% endif %}
 {% endfor %}
+    </div>
     </tbody>
 </table>

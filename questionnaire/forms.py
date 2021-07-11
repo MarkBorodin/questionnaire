@@ -237,7 +237,7 @@ class ResponseForm(models.ModelForm):
         choices = self.get_question_choices(question)
         if choices:
             kwargs["choices"] = choices
-        widget = self.get_question_widget(question)
+        widget = self.get_question_widget(question)    # forms.CheckboxSelectMultiple
         if widget:
             kwargs["widget"] = widget
         field = self.get_question_field(question, **kwargs)
