@@ -27,6 +27,7 @@ class Response(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, verbose_name=_("Survey"), related_name="responses")
     user = models.ForeignKey(user_model, on_delete=models.SET_NULL, verbose_name=_("User"), null=True, blank=True)
     interview_uuid = models.CharField(_("Interview unique identifier"), max_length=36)
+    number_of_responses_per_page = models.PositiveSmallIntegerField(null=True, blank=True, default=5)
 
     class Meta:
         verbose_name = _("Response")

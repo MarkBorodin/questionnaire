@@ -22,6 +22,9 @@ class GetPDF(PDFTemplateView):
         context['result_obj'] = result_obj
         context['survey'] = Survey.objects.get(id=result_obj.survey.id)
 
+        f = lambda lst, sz: [lst[i:i+sz] for i in range(0, len(lst), sz)] # noqa
+        context['questions_blocks'] = f(context['survey'].questions.all(), result_obj.number_of_responses_per_page)
+
         if 'get_result_pdf' in self.request.build_absolute_uri():
             self.show_content_in_browser = False
         elif 'view_result_pdf' in self.request.build_absolute_uri():
