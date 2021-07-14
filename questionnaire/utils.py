@@ -2,10 +2,10 @@ from io import StringIO
 
 from django.shortcuts import get_object_or_404
 from wkhtmltopdf.views import PDFTemplateView
-
+import base64
 from django.core.mail import EmailMessage
 from app.settings import EMAIL_HOST_USER
-from questionnaire.models import Survey, Response
+from questionnaire.models import *
 import csv
 from django.http import HttpResponse
 
@@ -50,3 +50,11 @@ def get_survey_result_csv(request, primary_key):
     writer.writerow(questions_list)
     writer.writerow(answers_list)
     return response
+
+
+def image_to_code(image):
+    data = open(f'media/{image}', 'rb').read()  # read bytes from file
+    data_base64 = base64.b64encode(data)  # encode to base64 (bytes)
+    data_base64 = data_base64.decode()    # convert bytes to string
+    html = '<img src="data:image/png;base64,' + data_base64 + '" id="p1img1">'   # embed in html
+    return html

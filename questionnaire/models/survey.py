@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
+from questionnaire.models.bg_image import BGImage
 from questionnaire.models.email_text import EmailText
 from questionnaire.models.global_text import GlobalText
 from questionnaire.models.survey_template import SurveyTemplate
@@ -47,6 +48,7 @@ class Survey(models.Model):
     email_text = models.ForeignKey(to=EmailText, null=True, blank=True, on_delete=models.SET_NULL)
     sent = models.BooleanField(default=False)
     completed = models.BooleanField(default=False)
+    bg_image = models.ForeignKey(verbose_name='background image', to=BGImage, null=True, blank=True, on_delete=models.SET_NULL) # noqa
 
     class Meta:
         verbose_name = _("survey")
@@ -65,6 +67,7 @@ class Survey(models.Model):
             self.publish_date = now()
             self.expire_date = in_duration_day()
             self.global_text = survey_template.global_text
+            self.bg_image = survey_template.bg_image
         super(self.__class__, self).save(*args, **kwargs)
 
     @property

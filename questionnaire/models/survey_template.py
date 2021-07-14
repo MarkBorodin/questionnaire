@@ -5,7 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-
+from questionnaire.models.bg_image import BGImage
 from questionnaire.models.global_text import GlobalText
 
 
@@ -37,6 +37,7 @@ class SurveyTemplate(models.Model):
     publish_date = models.DateField(_("Publication date"), blank=True, null=False, default=now)
     expire_date = models.DateField(_("Expiration date"), blank=True, null=False, default=in_duration_day)
     global_text = models.ForeignKey(to=GlobalText, null=True, blank=True, on_delete=models.SET_NULL)
+    bg_image = models.ForeignKey(to=BGImage, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = _("template")

@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 
 from questionnaire.exporter.csv import Survey2Csv
 from questionnaire.models import Answer, Category, Question, Response, Survey
+from questionnaire.models.bg_image import BGImage
 from questionnaire.models.email_text import EmailText
 from questionnaire.models.global_text import GlobalText
 from questionnaire.models.survey_template import SurveyTemplate
@@ -64,6 +65,11 @@ class SurveyTemplateAdmin(admin.ModelAdmin):
     # exclude = ['display_method', 'template', 'client', 'title', 'slug']
     exclude = ['template']
     search_fields = ['name', 'description']
+
+
+class BGImageAdmin(admin.ModelAdmin):
+    list_display = ("name", "image")
+    exclude = ['image_code']
 
 
 class AnswerBaseInline(admin.StackedInline):
@@ -124,3 +130,4 @@ admin.site.register(Response, ResponseAdmin)
 admin.site.register(SurveyTemplate, SurveyTemplateAdmin)
 admin.site.register(GlobalText)
 admin.site.register(EmailText)
+admin.site.register(BGImage, BGImageAdmin)

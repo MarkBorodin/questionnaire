@@ -3,10 +3,26 @@ import django.dispatch
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+from questionnaire.utils import *
 from questionnaire.models import Survey, Question, Response
 from questionnaire.models.survey_template import SurveyTemplate
+from questionnaire.models.bg_image import BGImage
 
 survey_completed = django.dispatch.Signal(providing_args=["instance", "data"])
+
+
+@receiver(post_save, sender=BGImage)
+def get_image_code(sender, instance, created, **kwargs):
+    if created:
+        instance.image_code = image_to_code(instance.image_pdf) if instance.image_pdf else ''
+        instance.save()
+    else:
+        new_code = image_to_code(instance.image_pdf) if instance.image_pdf else ''
+        if instance.image_code == new_code:
+            pass
+        else:
+            instance.image_code = new_code
+            instance.save()
 
 
 @receiver(post_save, sender=Survey)
