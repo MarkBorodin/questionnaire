@@ -61,6 +61,11 @@ cd questionnaire
 
 in ".env" file set: RUN_IN_DOCKER=False
 
+to install the required libraries, run on command line:
+```
+pip install -r requirements.txt
+```
+
 run redis:
 ```
 redis-server
@@ -86,6 +91,11 @@ create and enter a username;
 enter your email address;
 create and enter a password;
 enter the password again;)
+
+to start the server - run:
+```
+python manage.py runserver
+```
 
 follow the link:
 ```

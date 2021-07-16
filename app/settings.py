@@ -130,11 +130,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # STATIC_ROOT = '/static/'
 
-STATIC_ROOT = '/var/www/pdf_generator/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+if os.getenv('RUN_IN_DOCKER') == 'False':
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+else:
+    STATIC_ROOT = '/var/www/pdf_generator/static/'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
