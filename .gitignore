@@ -4,6 +4,5 @@ venv/
 /coverage.data
 /coverage/
 /htmlcov/
-.env
 db.sqlite3
 dump.rdb
